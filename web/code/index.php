@@ -22,6 +22,16 @@ $index_text= ($row=mysql_fetch_row($res)) ? $row[0] : '';
     <link href="../assets/css/bootstrap.css" rel="stylesheet">
     <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="../assets/css/docs.css" rel="stylesheet">
+
+    <!-- Put the following javascript before the closing </head> tag. -->
+    <script>
+      (function() {
+        var cx = '009214133664915278822:jxtzwpnxnz0';
+        var gcse = document.createElement('script'); gcse.type = 'text/javascript'; gcse.async = true;
+        gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcse, s);
+      })();
     </script>
     <!--[if IE 6]>
     <link href="ie6.min.css" rel="stylesheet">
@@ -90,6 +100,12 @@ $index_text= ($row=mysql_fetch_row($res)) ? $row[0] : '';
           <textarea id="chat_content" rows="10" class="chat-content" readonly disabled></textarea>
           <input type="text" id="ipt_message" class="span9" style="margin-bottom:0" placeholder="Type message" disabled>
           <button class="btn btn-primary pull-right" disabled id="btn_send">Send</button>
+        </div>
+      </div>
+      <div class="row-fluid">
+        <div class="span10 offset1 well">
+          <h4 class="center">Google Search</h4>
+          <gcse:search></gcse:search>
         </div>
       </div>
       <hr>
