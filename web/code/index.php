@@ -23,7 +23,7 @@ $index_text= ($row=mysql_fetch_row($res)) ? $row[0] : '';
     <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="../assets/css/docs.css" rel="stylesheet">
 
-    <!-- Put the following javascript before the closing </head> tag. -->
+    <!-- Put the following javascript before the closing </head> tag. 
     <script>
       (function() {
         var cx = '009214133664915278822:jxtzwpnxnz0';
@@ -32,13 +32,19 @@ $index_text= ($row=mysql_fetch_row($res)) ? $row[0] : '';
             '//www.google.com/cse/cse.js?cx=' + cx;
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcse, s);
       })();
-    </script>
+    </script>-->
     <!--[if IE 6]>
     <link href="ie6.min.css" rel="stylesheet">
     <![endif]-->
     <!--[if lt IE 9]>
       <script src="../assets/js/html5.js"></script>
     <![endif]-->
+    <script type="text/javascript" async>
+    (function(opts_){window.__gcse=window.__gcse||{};window.__gcse.ct=(new Date).getTime();window.__gcse.sacb=function(){};window.__gcse.scb=function(){var a=window.__gcse;a.plainStyle&&delete opts_.rawCss;google.search.cse.element.init(opts_)&&("explicit"!=a.parsetags?"complete"==document.readyState||"interactive"==document.readyState?(google.search.cse.element.go(),a.callback&&a.callback()):google.setOnLoadCallback(function(){google.search.cse.element.go();a.callback&&a.callback()},!0):a.callback&&a.callback())};
+var b=document.createElement("script"),c=opts_.protocol+"://"+opts_.uds+"/jsapi?autoload=",d=encodeURIComponent,e='{"name":"search","version":"1.0","callback":"__gcse.scb"',f=window.__gcse;if(!f||!f.plainStyle){var g=opts_.protocol+"://www.google.com/cse/style/look/",h;h=opts_.theme.toLowerCase().replace("v2_","v2/");e+=',"style":"'+(g+h+".css")+'"'}opts_.language&&(e+=',"language":"'+opts_.language+'"');e+="}";
+b.src=c+d('{"modules":['+e+',{"name":"ads","version":"3","packages":["search"],"callback":"__gcse.sacb"}]}')+"";b.type="text/javascript";document.getElementsByTagName("head")[0].appendChild(b);
+})({"cx":"009214133664915278822:jxtzwpnxnz0","language":"zh-Hans","theme":"V2_DEFAULT","uiOptions":{"resultsUrl":"","enableAutoComplete":false,"enableImageSearch":true,"imageSearchLayout":"popup","resultSetSize":"filtered_cse","enableOrderBy":false,"orderByOptions":[]},"protocol":"https","uds":"www.google.com","rawCss":"\n"});
+    </script>
   </head>
 
   <body>
@@ -56,6 +62,7 @@ $index_text= ($row=mysql_fetch_row($res)) ? $row[0] : '';
         <div class="span5 offset1 well">
           <h4 class="center">ChangeLog</h4>
           <ul style="margin-bottom:0">
+            <li>2012-11-8 添加About页面</li>
             <li>2012-11-5 增加Google自定义搜索</li>
             <li>2012-11-5 开放注册</li>
             <li>2012-10-26 导航条自动置顶</li>
@@ -68,10 +75,10 @@ $index_text= ($row=mysql_fetch_row($res)) ? $row[0] : '';
             <li>2012-10-18 Board有内容的主题前添加加号</li>
             <li>2012-10-17 增加User compare功能</li>
             <li>2012-10-16 网站针对IE6弹出提示</li>
-            <li>2012-10-16 用户信息中显示"Tried but failed"题目</li>
           </ul>
           <a href="#"  style="margin-left:25px" id="a_more_chl">More...</a>
           <ul style="margin-bottom:0" class="hide" id="more_chl">
+            <li>2012-10-16 用户信息中显示"Tried but failed"题目</li>
             <li>2012-10-15 主页上的聊天室完成</li>
             <li>2012-10-12 修改界面配色</li>
             <li>2012-10-12 Bootstrap库升至2.1</li>
