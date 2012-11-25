@@ -34,6 +34,9 @@ if($_POST['type']=='profile'){
 	if(!isset($_POST['userid'],$_POST['newpwd']))
 		die('Invalid argument.');
 	require('inc/database.php');
+
+	$disable='Y';
+
 	$user=mysql_real_escape_string(trim($_POST['userid']));
 	$len=strlen($user);
 	if($len==0)
@@ -48,7 +51,7 @@ if($_POST['type']=='profile'){
 		die('Password is too long or too short!');
 	$pwd=mysql_real_escape_string($_POST['newpwd']);
 
-	mysql_query("insert into users (user_id,email,password,reg_time,nick,school) values ('$user','".mysql_real_escape_string($_POST['email'])."','$pwd',NOW(),'".mysql_real_escape_string($_POST['nick'])."','".mysql_real_escape_string($_POST['school'])."')");
+	mysql_query("insert into users (user_id,defunct,email,password,reg_time,nick,school) values ('$user','$disable','".mysql_real_escape_string($_POST['email'])."','$pwd',NOW(),'".mysql_real_escape_string($_POST['nick'])."','".mysql_real_escape_string($_POST['school'])."')");
 	$code=mysql_errno();
 	if($code==0)
 		echo 'User created!';
