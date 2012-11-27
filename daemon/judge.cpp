@@ -189,10 +189,11 @@ void solution::judge()
 							status = RES_WA;
 							get_score = 0;
 							if(s == 1) {
-								tips = "Output mismatch.\n  Your: ";
-								tips += info.user_mismatch;
-								tips += "\nAnswer: ";
-								tips += info.std_mismatch;
+								tips = "Output mismatch.";
+// 								tips = "Output mismatch.\n  Your: ";
+// 								tips += info.user_mismatch;
+// 								tips += "\nAnswer: ";
+// 								tips += info.std_mismatch;
 								free(info.user_mismatch);
 								free(info.std_mismatch);
 							}
