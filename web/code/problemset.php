@@ -45,17 +45,17 @@ if(isset($_SESSION['user'])){
   <body>
     <?php require('page_header.php'); ?>      
     <div class="container-fluid" style="font-size:14px">
-      <div class="pagination pagination-centered">
-        <ul>
-          <?php 
+      <?php
+      if($maxpage>10){
+        echo '<div class="pagination pagination-centered"><ul>';
             for($i=10;$i<=$maxpage;++$i)
               if($i!=$page_id)
                 echo '<li><a href="problemset.php?page_id=',$i,'">',$i,'</a></li>';
               else
                 echo '<li class="active"><a href="problemset.php?page_id=',$i,'">',$i,'</a></li>';
-          ?>
-        </ul>
-      </div>
+        echo '</ul></div>';
+      }
+      ?>
       <div class="row-fluid">
         <div class="span10 offset1">
 
@@ -77,11 +77,17 @@ if(isset($_SESSION['user'])){
                   while($row=mysql_fetch_row($result)){
                 echo '<tr>';
                 echo '<td>',$row[0],'</td>';
-                if(isset($_SESSION['user']))echo '<td class="',is_null($row[6]) ? 'prob-not' : ($row[6] ? 'prob-wa' : 'prob-ac'),'"><i></i></td>';
-                echo '<td style="text-align:left"><a href="problempage.php?problem_id=',$row[0],'">',$row[1];
+                if(isset($_SESSION['user'])){
+                  echo '<td class="',is_null($row[6]) ? 'prob-not' : ($row[6] ? 'prob-wa' : 'prob-ac'),'"><i></i></td>';
+                  echo '<td style="text-align:left;border-left:0;">';
+                }else{
+                  echo '<td style="text-align:left">';
+                }
+                echo '<a href="problempage.php?problem_id=',$row[0],'">',$row[1];
                 if($row[5]=='Y')echo '<span style="color:red">(deleted)</span>';
                 echo '</a></td>';
-                echo '<td>',$row[2],'/',$row[3],'</td>';
+                echo '<td><a href="record.php?result=0&amp;problem_id=',$row[0],'">',$row[2],'</a>/';
+                echo '<a href="record.php?problem_id=',$row[0],'">',$row[3],'</a></td>';
                 echo '<td>',$row[3] ? intval($row[2]/$row[3]*100) : 0,'%</td>';
                 echo '<td>',$row[4],'</td>';
                 echo "</tr>\n";

@@ -6,7 +6,7 @@ if(!isset($_SESSION['user'])){
 ?>
 <!--[if IE 6]>
   <script>var LETSKILLIE6_DELAY=1;</script>
-  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+  <script src="http://letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
 <![endif]-->
 <header>
   <a href="index.php"><img src="../assets/img/logo.jpg" alt="Logo" class="img-rounded"></a>
@@ -20,7 +20,9 @@ if(!isset($_SESSION['user'])){
 <?php if(isset($_SESSION['user'])){?>
         <a class="btn dropdown-toggle" data-toggle="dropdown" style="white-space:nowrap" href="#">
           <i class="icon-user"></i>
-          <?php echo $_SESSION['user']?>
+          <?php
+          echo $_SESSION['user'],'<strong id="notifier"></strong>';
+          ?>
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">

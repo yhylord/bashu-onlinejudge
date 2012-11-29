@@ -11,11 +11,14 @@
 #include <microhttpd.h>
 #include "judge_daemon.h"
 
+char robots_txt[] = "User-agent: *\nDisallow: /\n";
+
 typedef std::pair<MHD_PostProcessor*, solution*> pair;
 int ignore_requst(struct MHD_Connection *connection)
 {
 	struct MHD_Response *response = 
 		MHD_create_response_from_buffer(0, NULL, MHD_RESPMEM_PERSISTENT);
+	// MHD_add_response_header(response, "Connection", "close");
 	int ret = MHD_queue_response(connection, MHD_HTTP_NOT_FOUND, response);
 	MHD_destroy_response(response);
 	return ret;
@@ -27,9 +30,19 @@ static int server_handler_get(
 	if(strcmp(method, "GET") == 0) {
 		char *result;
 		applog(url);
-		if(strstr(url, "/query_") == url && (result=JUDGE_get_progress(url))) {
+		if(strstr(url, "/query_") == url) { 
+			if(result=JUDGE_get_progress(url)) {
+				struct MHD_Response *response = 
+					MHD_create_response_from_buffer(strlen(result), result, MHD_RESPMEM_MUST_FREE);
+				// MHD_add_response_header(response, "Connection", "close");
+				int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
+				MHD_destroy_response(response);
+				return ret;
+			}
+		}else if(strcmp(url, "/robots.txt") == 0) {
 			struct MHD_Response *response = 
-				MHD_create_response_from_buffer(strlen(result), result, MHD_RESPMEM_MUST_FREE);
+				MHD_create_response_from_buffer(sizeof(robots_txt)-1, robots_txt, MHD_RESPMEM_PERSISTENT);
+			// MHD_add_response_header(response, "Connection", "close");
 			int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
 			MHD_destroy_response(response);
 			return ret;
@@ -81,6 +94,10 @@ static int iterate_post(void *arg, enum MHD_ValueKind, const char *name,
 			break;
 		case MSG_compare:
 			numcat(p->compare_way, data);
+			break;
+		case MSG_rejudge:
+			p->type = atol(data);
+			break;
 	}
 	return MHD_YES;
 }
@@ -123,7 +140,11 @@ static int server_handler_post(
 			return MHD_YES;
 		}else{ //last time, finish reading
 			//puts("last");
-			char *result = JUDGE_accept_submit(p->second);
+			char *result;
+			if(p->second->type == TYPE_rejudge)
+				result = JUDGE_start_rejudge(p->second);
+			else
+				result = JUDGE_accept_submit(p->second);
 			struct MHD_Response *response = 
 				MHD_create_response_from_buffer(strlen(result), result, MHD_RESPMEM_MUST_FREE);
 			int ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
