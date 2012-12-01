@@ -1,7 +1,14 @@
 <?php
+$require_auth = true; //need global authorization
+
 if(!isset($_SESSION['user'])){
-  header("location: auth.php");
-  exit(0);
+  require_once 'inc/cookie.php';
+  if(!check_cookie()) {
+    if($require_auth) {
+      header("location: auth.php");
+      exit(0);
+    }
+  }
 }
 ?>
 <!--[if lt IE 9]>
@@ -74,6 +81,13 @@ if(!isset($_SESSION['user'])){
           <div class="controls">
             <input id="pwd" name="pwd" type="password" placeholder="Password">
           </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <label class="checkbox">
+            <input type="checkbox" name="remember">&nbsp;Remember me
+          </label>
+        </div>
       </div>
       <input id="ret_url" name="url" type="hidden"><!--value=""-->
     </div>

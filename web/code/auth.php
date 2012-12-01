@@ -15,9 +15,8 @@
       <script src="../assets/js/html5.js"></script>
     <![endif]-->
     <style type="text/css">
-    #loginpage .form-horizontal .control-label {width: 80px;}
-    #loginpage .form-horizontal .controls {margin-left: 80px;}
-    h1{margin: 50px auto;}
+    .fake-legend{border-bottom-color:#e5e5e5;border-top:0;}
+    #top_title{margin: 50px auto;}
     </style>
   </head>
 
@@ -26,12 +25,14 @@
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span12 center">
-          <h1>Authorization Required</h1>
+          <h1 id="top_title"></h1>
         </div>
       </div>
       <div id="loginpage" class="row-fluid">
-        <div class="span4 offset4">
-          <form class="form-horizontal well center" id="form_login" action="login.php" method="post">
+        <div style="width:560px;margin:0 auto;">
+          <form class="form-horizontal well" id="form_login" action="login.php" method="post">
+            <h1 class="center">Authorization Required</h1>
+            <hr class="fake-legend">
             <div id="uid_ctl" class="control-group">
               <label class="control-label" for="uid">Name:</label>
               <div class="controls">
@@ -44,9 +45,16 @@
                   <input id="pwd" name="pwd" type="password" placeholder="Password">
                 </div>
             </div>
+            <div class="control-group">
+              <div class="controls">
+                <label class="checkbox">
+                  <input type="checkbox" name="remember">&nbsp;Remember me
+                </label>
+                <input id="signin" type="submit" value="Sign in" class="btn btn-primary">
+                <a href="#" onclick="return switch_page();" style="line-height:30px">Sign up</a>
+              </div>
+            </div>
             <input id="ret_url" name="url" value="index.php" type="hidden">
-            <input id="signin" type="submit" value="Sign in" class="btn btn-primary">
-            <a href="#" onclick="return switch_page();" style="line-height:30px">Sign up</a>
           </form>
         </div>
       </div>
