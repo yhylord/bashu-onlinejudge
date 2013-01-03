@@ -12,17 +12,6 @@ $row=mysql_fetch_row(mysql_query('select max(problem_id) from problem'));
 $maxpage=intval($row[0]/100);
 if($page_id<10 || $page_id>$maxpage)
   die('Argument out of range.');
-
-if(isset($_SESSION['administrator']))
-  $addt_cond='';
-else
-  $addt_cond=" defunct='N' and ";
-$range="between $page_id"."00 and $page_id".'99';
-if(isset($_SESSION['user'])){
-  $user_id=$_SESSION['user'];
-  $result=mysql_query("select problem_id,title,accepted,submit,in_date,defunct,res from problem LEFT JOIN (select problem_id as pid,MIN(result) as res from solution where user_id='$user_id' and problem_id $range group by problem_id) as temp on(pid=problem_id) where $addt_cond problem_id $range order by problem_id");
-}else
-  $result=mysql_query("select problem_id,title,accepted,submit,in_date,defunct from problem where $addt_cond problem_id $range  order by problem_id");
 ?>
 <!DOCTYPE html>
 <html>
@@ -43,7 +32,20 @@ if(isset($_SESSION['user'])){
   </head>
 
   <body>
-    <?php require('page_header.php'); ?>      
+    <?php
+      require('page_header.php');
+
+      if(isset($_SESSION['administrator']))
+        $addt_cond='';
+      else
+        $addt_cond=" defunct='N' and ";
+      $range="between $page_id"."00 and $page_id".'99';
+      if(isset($_SESSION['user'])){
+        $user_id=$_SESSION['user'];
+        $result=mysql_query("select problem_id,title,accepted,submit,in_date,defunct,res from problem LEFT JOIN (select problem_id as pid,MIN(result) as res from solution where user_id='$user_id' and problem_id $range group by problem_id) as temp on(pid=problem_id) where $addt_cond problem_id $range order by problem_id");
+      }else
+        $result=mysql_query("select problem_id,title,accepted,submit,in_date,defunct from problem where $addt_cond problem_id $range  order by problem_id");
+    ?>
     <div class="container-fluid" style="font-size:14px">
       <?php
       if($maxpage>10){
@@ -84,7 +86,7 @@ if(isset($_SESSION['user'])){
                   echo '<td style="text-align:left">';
                 }
                 echo '<a href="problempage.php?problem_id=',$row[0],'">',$row[1];
-                if($row[5]=='Y')echo '<span style="color:red">(deleted)</span>';
+                if($row[5]=='Y')echo '<span class="label label-important">Deleted</span>';
                 echo '</a></td>';
                 echo '<td><a href="record.php?result=0&amp;problem_id=',$row[0],'">',$row[2],'</a>/';
                 echo '<a href="record.php?problem_id=',$row[0],'">',$row[3],'</a></td>';
