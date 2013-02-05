@@ -2,6 +2,8 @@
 #include <vector>
 #include <ctime>
 
+#define DUMP_FOR_DEBUG
+
 struct case_info
 {
 	int error_code, time, memory;
