@@ -2,21 +2,35 @@
 require('inc/checklogin.php');
 
 if(isset($_GET['start_id']))
-  $top=intval($_GET['start_id']);
+  $query_id=intval($_GET['start_id']);
 else
-  $top=2100000000;
-if(isset($_GET['problem_id']))
-  $cond_prob='and problem_id='.intval($_GET['problem_id']);
-else
-  $cond_prob='';
+  $query_id=2100000000;
 
+if(isset($_GET['problem_id'])){
+  $cond_prob='and problem_id='.intval($_GET['problem_id']);
+  $query_prob=substr($cond_prob, 4);
+}else{
+  $query_prob=$cond_prob='';
+}
 require('inc/database.php');
-$subquery="select thread_id from message where thread_id<$top $cond_prob order by thread_id desc limit 50";
+$subquery="select thread_id from message where thread_id<$query_id $cond_prob order by thread_id desc limit 50";
 $res=mysql_query("select min(thread_id) from ($subquery) as tmptab");
 if(!$res)
   die('Wrong argument');
 $row=mysql_fetch_row($res);
 $range=$row[0];
+
+function get_pre_link($top)
+{
+  global $cond_prob;
+  $res=mysql_query("select max(thread_id) from (select thread_id from message where thread_id>=$top $cond_prob order by thread_id limit 50) as tmptab");
+  $row=mysql_fetch_row($res);
+  if($row[0])
+    $pre=$row[0]+1;
+  else
+    $pre=2100000000;
+  return $pre;
+}
 
 ?>
 <!DOCTYPE html>
@@ -58,7 +72,7 @@ $range=$row[0];
             </div>
             <div style="float:right">
               <input id="post_input" type="submit" class="btn btn-primary" value="Post">
-              <span id="cancel_input" class="btn">Cancel</span>
+              <button id="cancel_input" class="btn">Cancel</button>
             </div>
             <div id="post_status"></div>
           </fieldset>
@@ -74,10 +88,11 @@ $range=$row[0];
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span12" id="comments">
-          <a href="#" class="btn btn-primary btn-small" id="new_msg" style="margin-left:25px">Post New Message</a>
-          <?php 
+          <a href="#" title="Alt+N" class="btn btn-primary btn-small" id="new_msg" style="margin-left:25px">Post New Message</a>
+          <?php
+            $top=$query_id;
             if($range){
-              $res=mysql_query("select title,depth,user_id,message_id,in_date,thread_id,problem_id,ASCII(content) from message where thread_id<$top and thread_id>=$range $cond_prob order by thread_id desc,orderNum");
+              $res=mysql_query("select title,depth,user_id,message_id,in_date,thread_id,problem_id,ASCII(content) from message where thread_id<$query_id and thread_id>=$range $cond_prob order by thread_id desc,orderNum");
               $deep=-1;
               $top=0;
               $cnt=0;
@@ -110,7 +125,7 @@ $range=$row[0];
                 echo ' <button id="reply_msg',$row[3],'" class="btn btn-mini">Reply</button><p>';
                 if($row[7])
                   echo '<span>+ </span>';
-                echo '<a href="#" id="msg',$row[3],'">',htmlspecialchars($row[0]),'</a></p></div></div>';
+                echo '<a href="ajax_message.php?message_id=',$row[3],'" id="msg',$row[3],'">',htmlspecialchars($row[0]),'</a></p></div></div>';
               }
               echo '</li>';
               while($deep>0){
@@ -127,10 +142,10 @@ $range=$row[0];
       <div class="row-fluid">
         <ul class="pager">
           <li>
-            <a href="#" id="btn-pre">&larr; Newer</a>
+            <a class="pager-pre-link" title="Alt+A" href="board.php?<?php echo $query_prob,'&amp;start_id=',get_pre_link($top) ?>" id="btn-pre">&larr; Newer</a>
           </li>
           <li>
-            <a href="#" id="btn-next">Older &rarr;</a>
+            <a class="pager-next-link" title="Alt+D" href="<?php if($range) echo 'board.php?',$query_prob,'&amp;start_id=',$range; ?>#" id="btn-next">Older &rarr;</a>
           </li>
         </ul>
       </div> 
@@ -148,29 +163,9 @@ $range=$row[0];
 
     <script type="text/javascript"> 
       $(document).ready(function(){
-        var cur=<?php echo $top?>;
-        var prob_id="<?php if(isset($_GET['problem_id'])) echo 'problem_id=',intval($_GET['problem_id']),'&';?>";
         $('#nav_bbs').parent().addClass('active');
-        $('#ret_url').val('board.php?'+prob_id+'start_id='+cur);
-        <?php 
-          $subquery="select thread_id from message where thread_id>=$top $cond_prob order by thread_id limit 50";
-          $res=mysql_query("select max(thread_id) from ($subquery) as tmptab");
-          $row=mysql_fetch_row($res);
-          if($row[0])
-            $pre=$row[0]+1;
-          else
-            $pre=2100000000;
-        ?>
-        $('#btn-next').click(function(){
-          <?php if($range){?>
-          location.href='board.php?'+prob_id+'start_id='+<?php echo $range?>;
-          <?php }?>
-          return false;
-        });
-        $('#btn-pre').click(function(){
-          location.href='board.php?'+prob_id+'start_id='+<?php echo $pre?>;
-          return false;
-        });
+        $('#ret_url').val('board.php?<?php echo $query_prob,"&start_id=",$query_id?>');
+
         $('#comments p>a').click(function(E){
           var ID=E.target.id+'_detail';
           var node=document.getElementById(ID);
@@ -201,23 +196,20 @@ $range=$row[0];
         });
         var detail_ele=document.getElementById('detail_input');
         var minW=150,minH=100;
-        $('#new_msg').click(function(){
+        function open_replypanel(msg_id){
           <?php if(isset($_SESSION['user'])){?>
-          $('#msgid_input').val('0');
-          $('#replypanel h4').html('Post New Message');
+          var title = ((msg_id=='0')?'Post New Message':'Reply for #'+msg_id);
+          $('#msgid_input').val(msg_id);
+          $('#replypanel h4').html(title);
           $('#replypanel').show();
+          $('#msg_input').focus();
           <?php }else{echo 'alert("Please login first");';}?>
           return false;
-        });
-        $('#comments button').click(function(E){
-          <?php if(isset($_SESSION['user'])){?>
-          var ID=E.target.id.substring(9);
-          $('#msgid_input').val(ID);
-          $('#replypanel h4').html('Reply for #'+ID);
-          $('#replypanel').show();
-          <?php }else{echo 'alert("Please login first");';}?>
-          return false;
-        });
+        }
+        $('#new_msg').click(function(){open_replypanel('0')});
+        $('#comments button').click(function(E){open_replypanel(E.target.id.substring(9))});
+        reg_hotkey(78,function(){$('#new_msg').click()}); //Alt+N
+
         $('#replypanel form').submit(function(){
           var msg=$.trim($('#msg_input').val());
           if(msg.length==0){
@@ -231,9 +223,14 @@ $range=$row[0];
           $('#post_status').html('');
           return true;
         });
+        reg_hotkey(83,function(){$('#replypanel form').submit()}); //Alt+S
+
         $('#cancel_input').click(function(){
           $('#replypanel').hide();
           return false;
+        });
+        $('#replypanel').keyup(function(E){
+          E.which==27 && $('#replypanel').hide();
         });
         function move_handle(E){
           var w=origX-E.clientX+origW;
