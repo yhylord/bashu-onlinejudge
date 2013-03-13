@@ -40,6 +40,14 @@ shortcuts={
 		} , //Alt+M
 
 };
+shortcuts[49]=shortcuts[66]; //Alt+1
+shortcuts[50]=function(){location.href=$('#nav_set').attr('href');} //Alt+2
+shortcuts[51]=shortcuts[80]; //Alt+3
+shortcuts[52]=shortcuts[82]; //Alt+4
+shortcuts[53]=function(){location.href=$('#nav_rank').attr('href');} //Alt+5
+shortcuts[54]=function(){location.href=$('#nav_about').attr('href');} //Alt+6
+shortcuts[55]=shortcuts[73]; //Alt+7
+
 function reg_hotkey (key, fun) {
 	shortcuts[key] = fun;
 }
@@ -58,9 +66,13 @@ $(document).ready(function(){
 			$nav.removeClass('navbar-fixed-top');
 		}
 	}
-	if($nav.length){
+	if($nav.length && $('header').length){
 		processScroll();
 		$win.on('scroll', processScroll);
+	}else if($nav.length){
+		navFixed = true;
+		$container.css('margin-top','62px');
+		$nav.addClass('navbar-fixed-top');
 	}
 	$('#LoginModal').on('shown',function(){
 		$('#uid').focus();
@@ -112,7 +124,7 @@ $(document).ready(function(){
 		setTimeout(checkMail,3000);
 	}
 }).keydown(function(E){
-	console.log(E);
+	// console.log(E);
 	if(E.altKey && !E.metaKey){
 		var key=E.keyCode;
 		if(key>=97 && key<=122)

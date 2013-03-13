@@ -49,6 +49,12 @@ function get_pre_link($top)
     <!--[if lt IE 9]>
       <script src="../assets/js/html5.js"></script>
     <![endif]-->
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      skipStartupTypeset:true
+    });
+    </script>
+    <?php require('inc/mathjax_head.php');?>
   </head>
 
   <body>
@@ -120,6 +126,8 @@ function get_pre_link($top)
                 else
                   echo '<div class="msg msg_even">';
                 echo '<div class="msg_container"><strong>',$row[2],'</strong> ',$row[4];
+                if($row[3]==$row[5] && $deep>0)
+                  echo '&nbsp;<span class="label label-warning">latest</span>';
                 if($deep==0 && $row[6])
                     echo '&nbsp;&nbsp;<a class="prob_link" href="problempage.php?problem_id=',$row[6],'">Problem ',$row[6],'</a>';
                 echo ' <button id="reply_msg',$row[3],'" class="btn btn-mini">Reply</button><p>';
@@ -177,15 +185,16 @@ function get_pre_link($top)
             var sp=a.prev('span');
             if(sp.length){
               sp.html('- ');
-              a.parent().after('<pre id="'+ID+'"></pre>');
+              a.parent().after('<pre id="'+ID+'"><div id="'+ID+'_div"></div></pre>');
               $.get('ajax_message.php?message_id='+E.target.id.substring(3),function(data){
-                $(document.getElementById(ID)).html(parseBBCode(data)).find('a').each(function(){
+                $('#'+ID+'>div').html(parseBBCode(data)).find('a').each(function(){
                   var Href = this.getAttribute("href",2);
                   Href=Href.replace(/^([ \t\n\r]*javascript:)+/i,'');
                   if(!(/(ht|f)tps?:\/\//i.test(Href)))
                     Href = "http://"+Href;
                   this.href=Href;
                 });
+                MathJax.Hub.Queue(["Typeset",MathJax.Hub,(ID+'_div')]);
               });
             }else{
               var tmp=$('#alert_nothing').show();

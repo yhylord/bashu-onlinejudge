@@ -7,7 +7,7 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])){
   require('inc/database.php');
   if(isset($_POST['paswd'])){
 
-    require('inc/checkpwd.php');
+    require_once('inc/checkpwd.php');
     if(password_right($_SESSION['user'], $_POST['paswd']))
       $_SESSION['admin_panel']=1;
   }
@@ -34,10 +34,10 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])){
     <!--[if lt IE 9]>
       <script src="../assets/js/html5.js"></script>
     <![endif]-->
+    <style type="text/css">
+      .mainbutton>.btn{margin-top: 20px;}
+    </style>
   </head>
-  <style type="text/css">
-    .mainbutton>.btn{margin-top: 20px;}
-  </style>
 
   <body>
     <?php require('page_header.php'); ?>  
@@ -183,13 +183,15 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])){
           E.preventDefault();
           var jq=$(E.target);
           if(jq.is('i')){
-            var jq_uid=jq.parent().parent().prev(),oper;
+            var jq_uid=jq.parent().parent().prev(),oper,str_id;
             if(jq.hasClass('icon-remove')){
               jq_uid=jq_uid.prev();
-              if(! window.confirm("Are you sure to delete "+jq_uid.html()))
+              str_id=jq_uid.contents().filter(function(){return this.nodeType == 3;}).text();
+              if(!window.confirm("Are you sure to delete "+str_id))
                 return false;
               oper='del_usr';
             }else{
+              str_id=jq_uid.contents().filter(function(){return this.nodeType == 3;}).text();
               oper='en_usr';
             }
             $.ajax({
@@ -197,7 +199,7 @@ if(!isset($_SESSION['user'],$_SESSION['administrator'])){
               url:"ajax_admin.php",
               data:{
                 op:oper,
-                user_id:jq_uid.html()
+                user_id:str_id
               },
               success:getusrlist
             });
