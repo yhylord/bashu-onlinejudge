@@ -12,7 +12,7 @@ string lang_ext[MAXLANG];
 string lang_compiler[MAXLANG];  
 typedef INI <string, string, string> ini_t;
 
-extern char DATABASE_USER[], DATABASE_PASS[];
+extern char DATABASE_HOST[], DATABASE_USER[], DATABASE_PASS[];
 extern char DataDir[];
 
 bool read_config()
@@ -31,7 +31,10 @@ bool read_config()
 	}
 	strncpy(DataDir, tmp.c_str(), MAXPATHLEN);
 
-	tmp = ini.Get(std::string("DATABASE_USER"), std::string(""));
+	tmp = ini.Get(std::string("DATABASE_HOST"), std::string("localhost"));
+	strncpy(DATABASE_HOST, tmp.c_str(), 62);
+
+	tmp = ini.Get(std::string("DATABASE_USER"), std::string("root"));
 	strncpy(DATABASE_USER, tmp.c_str(), 120);
 
 	tmp = ini.Get(std::string("DATABASE_PASS"), std::string(""));

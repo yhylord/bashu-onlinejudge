@@ -11,20 +11,26 @@ require('inc/checklogin.php');
 require('inc/database.php');
 $res=mysql_query("select content from news where news_id=0");
 $index_text=($row=mysql_fetch_row($res)) ? $row[0] : '';
-
 $Title="Welcome to Bashu OnlineJudge";
 ?>
 <!DOCTYPE html>
 <html>
-  <?php require('head.php'); ?>
+
+    <?php require('head.php'); ?>
+
   <body>
     <?php require('page_header.php'); ?>  
           
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span10 offset1">
-          <div class="well" style="font-size:16px;padding:19px 40px">
-            <?php echo $index_text?>
+          <div id="newspad" class="well" style="font-size:16px;padding:19px 40px; background-color: #FFF">
+            <div id="title" style="text-align:center; font-size:24px;">
+                <h1 style="padding-bottom: 10px;">Welcome to Bashu OnlineJudge</h1>
+            </div> 
+            <div id="mainarea" style="display: none;">
+                <?php echo $index_text?>
+            </div>
           </div>
         </div>
       </div>
@@ -51,8 +57,19 @@ $Title="Welcome to Bashu OnlineJudge";
     <script type="text/javascript"> 
       $(document).ready(function(){
         $('#ret_url').val("index.php");
+
+        var originColor = '#E3E3E3';
+        $('#newspad #title').click(function(){
+            $('#newspad #mainarea').slideToggle();
+            /* change color, unnecessary in this theme
+            var tmp = $('#newspad').css('background-color');
+            $('#newspad').css('background-color', originColor);
+            originColor = tmp;
+             */
+        });
       });
     </script>
+
     <script type="text/javascript">
 $(function () {
     var chart;
@@ -99,8 +116,7 @@ $(function () {
                         enabled: true,
                         symbol: 'circle',
                         radius: 4,
-                        states: {
-                            hover: {
+                        states: { hover: {
                                 enabled: true
                             }
                         }
@@ -119,6 +135,6 @@ $(function () {
     
 });
     </script>
+
   </body>
 </html>
-
