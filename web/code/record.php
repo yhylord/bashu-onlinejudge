@@ -194,7 +194,7 @@ $Title="Record";
                   }
                   echo '<td>',round($row[7]/1024,2),' KB</td>';
                   echo '<td><a target="_blank" href="sourcecode.php?solution_id=',$row[0],'">',$LANG_NAME[$row[8]],'</a>';
-                  echo ' [<a href="#sw_open_',$row[0],'" class=',($row[10] ? '"a-green">O' : '"a-red">C'),'</a>]</td>';
+                  echo ' <a href="#sw_open_',$row[0],'"><i class=', ($row[10] ? '"icon-eye-open text-success"' : '"icon-eye-close muted"'), '></i></a> </td>';
                   echo '<td>',$row[9],'</td>';
                   echo '</tr>';
                 }
@@ -206,10 +206,10 @@ $Title="Record";
       <div class="row-fluid">
         <ul class="pager">
           <li>
-            <a class="pager-pre-link" title="Alt+A" href="record.php?<?php echo htmlspecialchars(get_pre_link())?>" id="btn-pre">&larr; Previous</a>
+            <a class="pager-pre-link" title="Alt+A" href="record.php?<?php echo htmlspecialchars(get_pre_link())?>" id="btn-pre"><i class="icon-angle-left"></i> Previous</a>
           </li>
           <li>
-            <a class="pager-next-link" title="Alt+D" href="record.php?<?php echo htmlspecialchars(get_next_link())?>" id="btn-next">Next &rarr;</a>
+            <a class="pager-next-link" title="Alt+D" href="record.php?<?php echo htmlspecialchars(get_next_link())?>" id="btn-next">Next <i class="icon-angle-right"></i></a>
           </li>
         </ul>
       </div>
@@ -238,34 +238,39 @@ $Title="Record";
 
     <script type="text/javascript"> 
       $(document).ready(function(){
-        $('#slt_lang>option[value=<?php echo $lang;?>]').attr('selected','selected');
-        $('#slt_result>option[value=<?php echo $result?>]').attr('selected','selected');
-        $('#slt_way>option[value="<?php echo $way?>"]').attr('selected','selected');
+        $('#slt_lang>option[value=<?php echo $lang;?>]').prop('selected',true);
+        $('#slt_result>option[value=<?php echo $result?>]').prop('selected',true);
+        $('#slt_way>option[value="<?php echo $way?>"]').prop('selected',true);
         $('#nav_record').parent().addClass('active');
         $('#ret_url').val("record.php"+window.location.search);
 
         function toggle_s(obj){
-          if(obj.hasClass('a-red')){
-            obj.removeClass('a-red');
-            obj.addClass('a-green');
-            obj.html('O');
+          if(obj.hasClass('icon-eye-close')){
+            obj.removeClass('icon-eye-close');
+            obj.addClass('icon-eye-open');
+            obj.removeClass('muted');
+            obj.addClass('text-success');
           }else{
-            obj.removeClass('a-green');
-            obj.addClass('a-red');
-            obj.html('C');
+            obj.removeClass('icon-eye-open');
+            obj.addClass('icon-eye-close');
+            obj.removeClass('text-success');
+            obj.addClass('muted');
           }
         }
         $('#tab_record').click(function(E){
           var $target=$(E.target);
-          if(!$target.is('a'))
-            return true;
+          if(!$target.is('a')){
+            $target=$target.parent();
+            if(!$target || !$target.is('a'))
+              return;
+          }
           var h=$target.attr('href');
           if(h.substr(0,9)=='#sw_open_'){
             $.ajax({
               type:"POST",
               url:"ajax_opensource.php",
               data:{"id":$target.attr('href').substr(9)},
-              success:function(msg){if(/success/.test(msg))toggle_s($target);}
+              success:function(msg){if(/success/.test(msg))toggle_s($target.find('i'));}
             });
             return false;
           }else if(h=='#uid'){
