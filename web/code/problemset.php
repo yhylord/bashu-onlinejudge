@@ -33,7 +33,7 @@ $Title="Problemset $page_id";
 
   <body>
     <?php require('page_header.php') ?>
-    <div class="container-fluid" style="font-size:14px">
+    <div class="container-fluid">
       <?php
       if($maxpage>10){
         echo '<div class="pagination pagination-centered"><ul>';
@@ -66,8 +66,7 @@ $Title="Problemset $page_id";
                     echo '<tr>';
                     echo '<td>',$row[0],'</td>';
                     if(isset($_SESSION['user'])){
-                      //echo '<td class="',is_null($row[6]) ? 'prob-not' : ($row[6] ? 'prob-wa' : 'prob-ac'),'"><i></i></td>';
-                      echo '<td><i class=', is_null($row[6]) ? '""' : ($row[6]? '"icon-remove icon-2x" style="color:red"' : '"icon-2x icon-ok" style="color:green"'), '></i>', '</td>';
+                      echo '<td><i class=', is_null($row[6]) ? '"icon-remove icon-2x" style="visibility:hidden"' : ($row[6]? '"icon-remove icon-2x" style="color:red"' : '"icon-2x icon-ok" style="color:green"'), '></i>', '</td>';
                       echo '<td style="text-align:left;border-left:0;">';
                     }else{
                       echo '<td style="text-align:left">';
@@ -97,7 +96,7 @@ $Title="Problemset $page_id";
         </ul>
       </div>
       <hr>
-      <footer class="muted" style="text-align: center;font-size:12px;">
+      <footer>
         <p>&copy; 2012 Bashu Middle School</p>
       </footer>
     </div>
