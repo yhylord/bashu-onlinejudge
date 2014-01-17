@@ -17,6 +17,29 @@ function encode_space(str) {
 	s=s.replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 	return s;
 }
+function GetUrlParms()    
+{
+    var args=new Object();
+    var query=location.search.substring(1);
+    var pairs=query.split("&");
+    for(var i=0;i<pairs.length;i++)
+    {
+        var pos=pairs[i].indexOf('=');
+        if(pos==-1) 
+        	continue;
+        var argname=pairs[i].substring(0,pos);
+        var value=pairs[i].substring(pos+1);
+        args[argname]=decodeURIComponent(value);
+    }
+    return args;
+}
+function BuildUrlParms(obj) {
+	var arr = [];
+	for (var name in obj){
+		arr.push(name+'='+encodeURIComponent(obj[name]));
+	}
+	return '?'+arr.join('&');
+}
 shortcuts={
 	"65": function(){
 			try{
@@ -111,11 +134,11 @@ $(document).ready(function(){
 	});
 	function checkMail()
 	{
-		$.get("ajax_checkmail.php",function(data){
+		$.get("ajax_mailfunc.php?op=check",function(data){
 			if(isNaN(data)||data=='0')
 				return;
 			$notifier.html('&nbsp;('+data+')');
-			var $alert=$('<div class="alert alert-success center nocontent">You have unread mails.</div>').appendTo('body');
+			var $alert=$('<div class="alert alert-success center alert-popup">You have unread mails.</div>').appendTo('body');
 			setTimeout(function(){$alert.fadeOut(400);},1000);
 		});
 	}
@@ -133,12 +156,3 @@ $(document).ready(function(){
 		return false;
 	}
 });
-
-	
-$(function(){
-    $('.nav a').hover(function(){
-        $('i', this).addClass('icon-large');
-    }, function(){
-        $('i', this).removeClass('icon-large');
-    });
-});    

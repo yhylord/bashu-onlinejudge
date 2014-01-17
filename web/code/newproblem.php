@@ -47,11 +47,22 @@ $Title="New problem";
             </p>
           </div>
         </div>
-        <div class="row-fluid">
+        <div class="row-fluid hide">
           <div class="span5">
             <p><span>Case score: </span><input id="input_score" name="score" class="input-mini" type="text" value="10"></p>
           </div>
         </div>      
+        <div class="row-fluid">
+          <div class="span5">
+            <p><span>Options: </span>
+            <div style="margin-left:20px">
+              <label class="checkbox">
+                <input type="checkbox" name="disable_open_source">Disable Open Source
+              </label>
+            </div>
+            </p>
+          </div>
+        </div>
         <div class="row-fluid">
           <div class="span9">
             <p>

@@ -156,7 +156,7 @@ CREATE TABLE `mail` (
   `title` varchar(200) DEFAULT NULL,
   `content` mediumtext,
   `new_mail` tinyint(1) NOT NULL DEFAULT '1',
-  `reply` tinyint(4) DEFAULT '0',
+  `flags` tinyint(4) UNSIGNED DEFAULT '0',
   `in_date` datetime DEFAULT NULL,
   `defunct` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`mail_id`),
@@ -401,6 +401,17 @@ LOCK TABLES `users` WRITE;
 INSERT INTO `users` VALUES ('root','',0,0,0,'N','127.0.0.1','2005-04-06 15:04:00',1,0,'rootpass','2005-04-06 11:25:58','default administrator','');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+
+DROP TABLE IF EXISTS `preferences`;
+CREATE TABLE `preferences` (
+  `id` int AUTO_INCREMENT,
+  `user_id` varchar(20) NOT NULL DEFAULT '',
+  `property` varchar(20) NOT NULL DEFAULT '',
+  `value` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `u_p` (`user_id`,`property`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

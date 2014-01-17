@@ -111,6 +111,14 @@ $Title="Admin panel";
                     <input type="submit" class="btn" value="Disable">
                     <input type="hidden" name="op" value="disable_usr">
                   </form>
+                  <hr>
+
+                  <form action="admin.php" method="post" class="form-inline" id="form_resetpwd">
+                    <label for="input_reset_usr" style="display:block">Reset Password</label>
+                    <input type="text" id="input_reset_usr" name="user_id" class="input-small" placeholder="User ID">
+                    <input type="submit" class="btn" value="Reset">
+                    <input type="hidden" name="op" value="reset_usr">
+                  </form>
                 </div>
               </div>
             </div>
@@ -174,15 +182,15 @@ $Title="Admin panel";
           E.preventDefault();
           var jq=$(E.target);
           if(jq.is('i')){
-            var jq_uid=jq.parent().parent().prev(),oper,str_id;
+            var oper;
+            var str_id=jq.parents('tr').first().children().first().contents()
+              .filter(function(){return this.nodeType == 3;})
+              .text();
             if(jq.hasClass('icon-remove')){
-              jq_uid=jq_uid.prev();
-              str_id=jq_uid.contents().filter(function(){return this.nodeType == 3;}).text();
               if(!window.confirm("Are you sure to delete "+str_id))
                 return false;
               oper='del_usr';
             }else{
-              str_id=jq_uid.contents().filter(function(){return this.nodeType == 3;}).text();
               oper='en_usr';
             }
             $.ajax({
@@ -223,6 +231,18 @@ $Title="Admin panel";
             url:"ajax_admin.php",
             data:$('#form_usr').serialize(),
             success:getusrlist
+          });
+          return false;
+        });
+        $('#form_resetpwd').submit(function(E){
+          E.preventDefault();
+          if(!window.confirm("Are you sure to reset password?"))
+            return false;
+          $.ajax({
+            type:"POST",
+            url:"ajax_admin.php",
+            data:$('#form_resetpwd').serialize(),
+            success:function(info){alert(info)}
           });
           return false;
         });
@@ -277,6 +297,7 @@ $Title="Admin panel";
           });
           return false;
         });
+        $('#input_adminpass').focus();
       });
 
       function update_chart(){
@@ -298,8 +319,6 @@ $Title="Admin panel";
                   yAxis: 0
                 }]
               });
-              // console.log("cpuChart");
-              console.log(window.cpuChart);
             }
             cpuChart.series[0].points[0].update(data.cpu,true);
           }
@@ -319,8 +338,6 @@ $Title="Admin panel";
                   yAxis: 0
                 }]
               });
-              // console.log("memChart");
-              console.log(window.memChart);
 
               $('#meter_title').show();
             }

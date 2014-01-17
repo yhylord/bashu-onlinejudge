@@ -1,17 +1,23 @@
 <?php
 require('inc/checklogin.php');
+require('inc/mail_flags.php');
 
 if(isset($_GET['start_id']))
 	$page=intval($_GET['start_id']);
 else
 	$page=0;
 
+if(isset($_GET['starred']))
+	$cond_starred='and (flags &'.MAIL_FLAG_STAR.')';
+else
+	$cond_starred='';
+
 if(!isset($_SESSION['user']))
 	$info = 'Not logged in.';
 else{
 	require('inc/database.php');
 	$user_id=$_SESSION['user'];
-	$result=mysql_query("select mail_id,title,from_user,new_mail,in_date from mail where to_user='$user_id' and UPPER(defunct)='N' order by mail_id desc limit $page,20");
+	$result=mysql_query("select mail_id,title,from_user,new_mail,in_date,flags from mail where to_user='$user_id' and UPPER(defunct)='N' $cond_starred order by mail_id desc limit $page,20");
 }
 $Title="Mail List";
 ?>
@@ -28,8 +34,9 @@ $Title="Mail List";
 			}else{
 			?>
 			<div class="row-fluid">
-				<div class="span2 offset2">
+				<div class="span2 offset2 form-inline">
 					<span id="sendnew" style="margin:5px" class="btn btn-small"><i class="icon-inbox"></i> COMPOSE </span>
+		            <label class="checkbox"><input <?php if(isset($_GET['starred']))echo 'checked'?>  id="chk_starred" type="checkbox" name="star">Starred</label>
 				</div>
 			</div>
 			<div class="row-fluid">
@@ -37,12 +44,14 @@ $Title="Mail List";
 						<ul class="unstyled">
 						<?php
 						while($row=mysql_fetch_row($result)){
-							echo '<li class="mail-item" id="mail',$row[0],'">';
+							echo '<li class="mail-item" ',($row[3] ? 'style="background-color: #FCF8E3;"' : ''),' id="mail',$row[0],'">';
 						?>
 								<div class="mail-container">
 									<div class="mail-title">
+										<a href="#star" style="text-decoration:none">
+											<i class="<?php echo ($row[5]&MAIL_FLAG_STAR)?'icon-star':'icon-star-empty'?> icon-large text-warning"></i>
+										</a>
 										<?php 
-										if($row[3])echo '<span class="label label-warning" style="padding:1px"><i class="icon-chevron-right icon-white"></i></span>';
 										echo '<a href="#title">',htmlspecialchars($row[1]),'</a>';
 										?>
 									</div>
@@ -130,12 +139,17 @@ $Title="Mail List";
 				var cur=<?php echo $page?>;
 				$('#ret_url').val("mail.php");
 				$('#btn-next').click(function(){
-					location.href='mail.php?start_id='+(cur+20);
+					var url_parm=GetUrlParms();
+					url_parm['start_id']=cur+20;
+					location.href='mail.php'+BuildUrlParms(url_parm);
 					return false;
 				});
 				$('#btn-pre').click(function(){
-					if(cur-20>=0)
-						location.href='mail.php?start_id='+(cur-20);
+					if(cur-20>=0){
+						var url_parm=GetUrlParms();
+						url_parm['start_id']=cur-20;
+						location.href='mail.php'+BuildUrlParms(url_parm);
+					}
 					return false;
 				});
 				$('#maillist').click(function(E){
@@ -149,34 +163,37 @@ $Title="Mail List";
 					var j=$a.attr('href'),k,content,mailid;
 					switch(j.substr(j.lastIndexOf('#')+1)){
 						case 'title':
-							k=$a.parent().parent(); 
-							mailid=k.parent().get(0).id.substr(4);
+							k=$a.parents('.mail-container'); 
+							mailid=k.parent().css('background-color','').attr('id').substr(4);
 							content=k.children('.mail-content');
 							if(content.is(":hidden")){
-								$.get('ajax_showmail.php?mail_id='+mailid,function(data){
+								$.get('ajax_mailfunc.php?op=show&mail_id='+mailid,function(data){
 									if(typeof(window.fix_ie_pre)!='undefined')
 										data=encode_space(data);
 									content.children('pre').html(data);
 								});
 								content.show();
-								$a.prev('span').remove();
 							}else{
 								content.hide();
 							}
 							break;
 						case 'del':
 							k=$a.parents('li');
-							$.ajax('ajax_deletemail.php?mail_id='+k.attr('id').substr(4));
+							$.ajax('ajax_mailfunc.php?op=delete&mail_id='+k.attr('id').substr(4));
 							k.remove();
 							break;
 						case 'rep':
-							k=$a.parent().parent().prev().prev();
-							content=k.html();
+							k=$a.parents('.mail-container');
+							content=k.children('.mail-info').html();
 							$('#to_input').val(content.substr(0,content.indexOf(' ')));
-							k=k.prev().children('a');
-							$('#title_input').val('Re:'+k.html());
+							$('#title_input').val('Re:'+k.find('a[href="#title"]').html());
 							$('#send_result').hide();
 							$('#MailModal').modal('show');
+							break;
+						case 'star':
+							k=$a.parents('li');
+							$.ajax('ajax_mailfunc.php?op=star&mail_id='+k.attr('id').substr(4));
+							$a.find('i').toggleClass('icon-star').toggleClass('icon-star-empty');
 							break;
 					}
 					return false;
@@ -184,7 +201,7 @@ $Title="Mail List";
 				$('#send_btn').click(function(){
 					$.ajax({
 						type:"POST",
-						url:"ajax_sendmail.php",
+						url:"ajax_mailfunc.php?op=send",
 						data:$('#send_form').serialize(),
 						success:function(msg){
 							if(msg.indexOf('__OK__')!=-1){
@@ -199,6 +216,15 @@ $Title="Mail List";
 					$('#send_result').hide();
 					$('#MailModal').modal('show');
 					$('#to_input').focus();
+				});
+				$('#chk_starred').change(function(E){
+					var url_parm=GetUrlParms();
+					url_parm['start_id']=0;
+					if(E.target.checked)
+						url_parm['starred']=1;
+					else
+						delete url_parm.starred;
+					location.href='mail.php'+BuildUrlParms(url_parm);
 				});
 				reg_hotkey(78,function(){$('#sendnew').click()}); //Alt+N
 		        reg_hotkey(83,function(){$('#send_btn').click()}); //Alt+S
