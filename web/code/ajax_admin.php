@@ -7,15 +7,18 @@ if(!isset($_POST['op']))
 $op=$_POST['op'];
 require('inc/database.php');
 if($op=="list_usr"){ 
-	$res=mysql_query("select user_id,accesstime from users where defunct='Y'");
+	$res=mysql_query("select user_id,accesstime,solved,submit,(accesstime IS NULL) from users where defunct='Y'");
 	if(mysql_num_rows($res)==0)
 		die ('<div class="row-fluid"><div class="alert alert-info span4">No disabled users</div></div>');
 ?>
-	<table class="table table-condensed table-striped" style="width:480px">
+	<table class="table table-condensed table-striped" style="width:550px">
 		<caption>Disabled users</caption>
 		<thead>
 			<tr>
 				<th>User</th>
+				<th>Last Login</th>
+				<th>Submit</th>
+				<th>AC</th>
 				<th>Enable</th>
 				<th>Delete</th>
 			</tr>
@@ -26,7 +29,12 @@ if($op=="list_usr"){
 					echo '<tr><td>',$row[0];
 					if(is_null($row[1]))
 						echo '<span style="color:red">(new)</span>';
-					echo '</td><td><a href="#"><i class="icon icon-ok"></i></a></td><td><a href="#"><i class="icon icon-remove"></i></a></td></tr>';
+					echo '</td>';
+					echo '<td>',$row[1],'</td>';
+					echo '<td>',$row[3],'</td>';
+					echo '<td>',$row[2],'</td>';
+					echo '<td><a href="#"><i class="icon icon-ok"></i></a></td>';
+					echo '<td>',($row[4]?'<a href="#"><i class="icon icon-remove"></i></a>':''),'</td></tr>';
 				}
 			?>
 		</tbody>
@@ -44,7 +52,7 @@ if($op=="list_usr"){
 		</thead>
 		<tbody>
 			<?php 
-				$res=mysql_query("select user_id,rightstr from privilege");
+				$res=mysql_query("select user_id,rightstr from privilege order by user_id");
 				while($row=mysql_fetch_row($res)){
 					echo '<tr><td>',$row[0],'</td><td>',$row[1],'</td><td><a href="#"><i class="icon icon-remove"></i></a></td></tr>';
 				}
@@ -96,7 +104,7 @@ if($op=="list_usr"){
 	mysql_query("insert into privilege VALUES ('$uid','$right','N')");
 }else if($op=="del_usr"){
 	isset($_POST['user_id']) ? $uid=mysql_real_escape_string(trim($_POST['user_id'])) : die('');
-	mysql_query("delete from users where user_id='$uid'");
+	mysql_query("delete from users where user_id='$uid' and (accesstime IS NULL)");
 }else if($op=="del_priv"){
 	isset($_POST['user_id']) ? $uid=mysql_real_escape_string(trim($_POST['user_id'])) : die('');
 	isset($_POST['right']) ? $right=mysql_real_escape_string($_POST['right']) : die('');
@@ -116,5 +124,12 @@ if($op=="list_usr"){
 		echo "success";
 	else
 		echo "fail";
+}else if($op=="reset_usr"){
+	isset($_POST['user_id']) ? $uid=mysql_real_escape_string(trim($_POST['user_id'])) : die('');
+	mysql_query("update users set password=user_id where user_id='$uid'");
+	if(mysql_affected_rows()==1)
+		echo 'Password is the same as user name now!';
+	else
+		echo 'No such user!';
 }
 ?>
