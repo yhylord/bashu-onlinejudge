@@ -17,6 +17,15 @@ function encode_space(str) {
 	s=s.replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 	return s;
 }
+function LoadCSS(url) {
+   var head = document.getElementsByTagName('head')[0];
+   var link = document.createElement('link');
+   link.type = 'text/css';
+   link.rel = 'stylesheet';
+   link.href = url;
+   head.appendChild(link);
+   return link;
+ }
 function GetUrlParms()    
 {
     var args=new Object();
@@ -102,14 +111,25 @@ $(document).ready(function(){
 	$('#logoff_btn').click(function(){$.ajax({url:"logoff.php",dataType:"html",success:function(){location.reload();}});});
 	var $search_input=$('#search_input');
 	if($search_input.length)
+	{
 		$search_input.typeahead({
 			source:function(query, update){
+				var typeahead = this;
 				$.getJSON("ajax_search.php?q="+encodeURIComponent(query),function (r){
 					  update(r.arr);
+					  typeahead.$menu.find('.active').removeClass('active');
 					}
 				);
 			}
 		});
+		$search_input.keydown(function(E){
+			if(E.keyCode == 13){
+				var selected = $search_input.parent().find('.typeahead:visible>.active');
+				if(!selected.length)
+					$('#search_form').submit();
+			}
+		})
+	}
 	$('#form_login').submit(function(E){
 		var b=false;
 		if($('#uid').attr('value')==''){
