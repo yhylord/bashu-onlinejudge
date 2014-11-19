@@ -12,13 +12,29 @@ else
   $prob_id=1000;
 require('inc/database.php');
 
-$query="select title,description,input,output,sample_input,sample_output,hint,source,case_time_limit,memory_limit,case_score,defunct,has_tex from problem where problem_id=$prob_id";
+$query="select title,description,input,output,sample_input,sample_output,hint,source,case_time_limit,memory_limit,case_score,defunct,has_tex,compare_way from problem where problem_id=$prob_id";
 $result=mysql_query($query);
 $row=mysql_fetch_row($result);
 if(!$row)
   die('Wrong Problem ID.');
+switch ($row[13] >> 16) {
+  case 0:
+    $comparison='Traditional';
+    break;
+  case 1:
+    $comparison='Real, precision: '.($row[13] & 65535);
+    break;
+  case 2:
+    $comparison='Integer';
+    break;
+  case 3:
+    $comparison='Special Judge';
+    break;
+}
 
 if($row[11]=='Y' && !isset($_SESSION['administrator']))
+  $forbidden=true;
+else if($row[12]&PROB_IS_HIDE && !isset($_SESSION['insider']))
   $forbidden=true;
 else{
   $forbidden=false;
@@ -37,6 +53,19 @@ else{
         $info = '<tr><td colspan="2" class="gradient-red center"><i class="icon-remove icon-white"></i> Try Again !</td></tr>';
       }
     }
+    $current_user=$_SESSION['user'];
+    $result=mysql_query("SELECT problem_id FROM saved_problem where user_id='$current_user' and problem_id=$prob_id");
+    $mark_flag=mysql_fetch_row($result);
+    if(!($mark_flag)){
+        $mark_icon_class='icon-star-empty';
+        $mark_btn_class='btn btn-default btn-block';
+        $mark_btn_html='Mark';
+    }else{
+        $mark_icon_class='icon-star';
+        $mark_btn_class='btn btn-danger btn-block';
+        $mark_btn_html='Unmark';
+    }
+
   }else{
     $info = '<tr><td colspan="2" class="center muted" >Not logged in.</td></tr>';
   } 
@@ -136,6 +165,7 @@ $Title="Problem $prob_id";
                     <tr><td style="text-align:left">Case Time Limit:</td><td><?php echo $row[8]?> ms</td></tr>
                     <tr><td style="text-align:left">Memory Limit:</td><td><?php echo $row[9]?> KB</td></tr>
                     <tr><td style="text-align:left">Case score:</td><td><?php echo $row[10]?></td></tr>
+                    <tr><td style="text-align:left">Comparison:</td><td><?php echo $comparison?></td></tr>
                     <?php
                     if($prob_level)
                       echo '<tr><td style="text-align:left">Level:</td><td>',$prob_level,'</td></tr>';
@@ -181,6 +211,16 @@ $Title="Problem $prob_id";
             </div>
           </div>
           <?php }?>
+          <?php if(isset($mark_btn_class)){ ?>
+          <div class="row-fluid">
+            <div class="span12" style="margin-bottom: 20px;">
+              <a href="#" class="<?php echo $mark_btn_class; ?>" id="action_mark">
+              <i class="<?php echo $mark_icon_class;?>"></i>
+              <span id="action_mark_html"><?php echo $mark_btn_html; ?></span>
+              </a>
+            </div>
+          </div>
+          <?php } ?>
         </div>
         <?php }?>
       </div>
@@ -256,6 +296,27 @@ $Title="Problem $prob_id";
             //$('#SubmitModal').modal('hide');
             return true;
           }
+        });
+	$("#action_mark").click(function(){
+            var op;
+            if($('#action_mark_html').html()=="Mark")
+                op="add_saved";
+            else
+                op="rm_saved";	
+            $.get("ajax_saveproblem.php?prob="+prob+"&op="+op,function(result){
+                if(/__ok__/.test(result)){
+                    var tg=$("#action_mark");
+                    tg.toggleClass("btn-danger");
+                    tg.toggleClass("btn-default");
+                    tg.find('i').toggleClass('icon-star-empty').toggleClass('icon-star');
+                    var tg=$("#action_mark_html");
+                    if(tg.html()=="Mark")
+                        tg.html("Unmark");
+                    else
+                        tg.html("Mark");
+                }
+            });
+            return false;
         });
         function click_submit(){
           <?php if(!isset($_SESSION['user'])){?>
