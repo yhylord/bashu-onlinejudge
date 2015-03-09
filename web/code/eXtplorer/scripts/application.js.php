@@ -253,15 +253,6 @@ function ext_init(){
                               		<?php }  ?>
                           		},
                               	'-',
-                              	{
-                          			xtype: "tbbutton",
-                             		id: 'tb_info',
-                              		icon: '<?php echo _EXT_URL ?>/images/_help.png',
-                              		tooltip: '<?php echo ext_Lang::msg('aboutlink', true ) ?>',
-                              		cls:'x-btn-icon',
-                              		handler: function() { openActionDialog(this, 'get_about'); }
-                              	},
-                              	'-',
                               	<?php
                           		// ADMIN & LOGOUT
                           		if(!empty($GLOBALS["require_login"])) {
@@ -280,15 +271,7 @@ function ext_init(){
                           	    	<?php
                           			}
                           			?>
-                          	    	{	// LOGOUT
-                          	    		xtype: "tbbutton",
-                                 		id: 'tb_logout',
-                          	    		icon: '<?php echo _EXT_URL ?>/images/_logout.png',
-                          	    		tooltip: '<?php echo ext_Lang::msg('logoutlink', true ) ?>',
-                          	    		cls:'x-btn-icon',
-                          	    		handler: function() { document.location.href='<?php echo ext_make_link('logout', null ) ?>'; }
-                          	    	},		
-                          	    	'-',
+                          	    	
                           			<?php
                           		}
                           		?>		

@@ -55,7 +55,7 @@ function show_header($dirlinks='') {
 	}
 	
 	echo "<link rel=\"stylesheet\" href=\""._EXT_URL."/style/style.css\" type=\"text/css\" />\n";
-	echo "<div id=\"ext_header\">\n";
+	echo "<div id=\"ext_header\" style=\"display:none;\">\n";
 	echo "<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"5\">\n";
 	$mode = extGetParam( $_SESSION, 'file_mode', $GLOBALS['ext_conf']['authentication_method_default'] );
 	$logoutlink = ' <a href="'.$GLOBALS['script_name'].'?option=com_extplorer&amp;action=logout" title="'.$GLOBALS['messages']['logoutlink'].'">['.$GLOBALS['messages']['logoutlink'].']</a>';

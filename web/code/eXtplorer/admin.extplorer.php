@@ -150,8 +150,6 @@ if( class_exists(strtolower($classname)) && is_callable(array($classname,'execac
 		ext_Result::sendResult('', false, '');
 		break;
 	case'get_about':
-		require_once( _EXT_PATH . "/include/system_info.php" );
-		system_info();
 		break;
 	//------------------------------------------------------------------------------
 	// DEFAULT: LIST FILES & DIRS

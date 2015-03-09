@@ -59,13 +59,7 @@ if( !empty( $_GET['nofetchscript'])) {
 	$_COOKIE['nofetchscript'] = 1;
 }
 //------------------------------------------------------------------------------
-	// if gzcompress is available, we can use Zip, Tar and TGz
-	if ( extension_loaded("zlib")) {
-		$GLOBALS["zip"] = $GLOBALS["tgz"] = true;
-	}
-	else {
 		$GLOBALS["zip"] = $GLOBALS["tgz"] = false;
-	}
 
 // the filename of the eXtplorer script: (you rarely need to change this)
 $GLOBALS["script_name"] = "//"  . $GLOBALS['__SERVER']['HTTP_HOST'] . $GLOBALS['__SERVER']["PHP_SELF"];
