@@ -37,6 +37,7 @@ function ext_load_users() {
 }
 //------------------------------------------------------------------------------
 function ext_save_users() {
+	return false;
 	$cnt=count($GLOBALS["users"]);
 	if($cnt>0) sort($GLOBALS["users"]);
 

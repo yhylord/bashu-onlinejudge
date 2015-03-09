@@ -41,6 +41,13 @@ if( stristr( $_SERVER['SCRIPT_NAME'], 'com_extplorer') || stristr( $_SERVER['SCR
 define( '_VALID_MOS', 1 );
 define( '_VALID_EXT', 1 );
 
+session_start();
+if(isset($_SESSION['user']))
+	$GLOBALS['oj_user']=$_SESSION['user'];
+if(isset($_SESSION['administrator']))
+	$GLOBALS['oj_administrator']=$_SESSION['administrator'];
+session_write_close();
+
 require_once( dirname(__FILE__).'/libraries/standalone.php');
 ob_start();
 include( dirname(__FILE__).'/admin.extplorer.php' );
