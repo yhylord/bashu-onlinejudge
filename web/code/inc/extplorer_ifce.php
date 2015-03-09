@@ -1,6 +1,6 @@
 <?php
 
-define('LEARNING_RESOURCES_DIR', '/Users/zhang/tmp/qui_files');
+define('LEARNING_RESOURCES_DIR', '/u1/oj_resources');
 
 $GLOBALS["users"]=array(
     // array('admin','21232f297a57a5a743894a0e4a801fc3','/Users/zhang/tmp/qui_files','http://localhost','1','','7',1),
