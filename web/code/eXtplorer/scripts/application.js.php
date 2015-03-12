@@ -414,6 +414,8 @@ function ext_init(){
            header: "<?php echo ext_Lang::msg('modifheader', true ) ?>",
            dataIndex: 'modified',
            width: 150,
+           hidden: true,
+           hideable: false,
 		   sortable: true
         },{
            header: "<?php echo ext_Lang::msg('permheader', true ) ?>",
