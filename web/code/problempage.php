@@ -1,4 +1,4 @@
-<?php 
+<?php
 require('inc/result_type.php');
 require('inc/lang_conf.php');
 require('inc/problem_flags.php');
@@ -7,7 +7,7 @@ require('inc/checklogin.php');
 if(isset($_GET['problem_id']))
   $prob_id=intval($_GET['problem_id']);
 else if(isset($_SESSION['view']))
-  $prob_id=$_SESSION['view'];
+  $prob_id=intval($_SESSION['view']);
 else
   $prob_id=1000;
 require('inc/database.php');
@@ -79,7 +79,7 @@ else{
 
   }else{
     $info = '<tr><td colspan="2" class="center muted" >Not logged in.</td></tr>';
-  } 
+  }
   $result=mysql_query("select submit_user,solved,submit from problem where problem_id=$prob_id");
   $statis=mysql_fetch_row($result);
   $submit_user=$statis[0];
@@ -91,7 +91,7 @@ else{
   $arr=array();
   while($statis=mysql_fetch_row($result))
     $arr[$statis[0]]=$statis[1];
-  ksort($arr);  
+  ksort($arr);
 }
 $Title="Problem $prob_id";
 ?>
@@ -106,10 +106,10 @@ $Title="Problem $prob_id";
     require('page_header.php');
     ?>
     <div id="probdisp" class="container-fluid">
-      <?php 
+      <?php
       if($forbidden){
         echo '<div class="span12 center">Problem is not available!</div>';
-      }else{ 
+      }else{
       ?>
       <div class="row-fluid">
         <div class="span9" id="leftside" style="font-size:16px">
@@ -171,7 +171,7 @@ $Title="Problem $prob_id";
           <div class="row-fluid">
             <div class="span12">
               <div class="well well-small">
-                <table class="table table-condensed table-striped" style="margin-bottom:0px;">
+                <table class="table table-condensed table-striped" style="margin-bottom:0;">
                   <tbody>
                     <tr><td style="text-align:left">Case Time Limit:</td><td><?php echo $row[8]?> ms</td></tr>
                     <tr><td style="text-align:left">Memory Limit:</td><td><?php echo $row[9]?> KB</td></tr>
@@ -188,7 +188,7 @@ $Title="Problem $prob_id";
           </div>
           <div class="row-fluid"><div class="span12">
             <div id="status" class="well well-small" style="margin-top:10px">
-              <table class="table table-condensed table-striped" style="margin-bottom:0px">
+              <table class="table table-condensed table-striped" style="margin-bottom:0">
                 <tbody>
                 <?php echo $info ?>
                 <tr><td style="text-align:left">Users Submitted:</td><td><?php echo $submit_user?></td></tr>
@@ -379,7 +379,7 @@ $Title="Problem $prob_id";
                   $('#note_content').text(data[i].value);
                 else if(data[i].name=='tags')
                   $('#user_tags').text(data[i].value);
-              };
+              }
               $('#note_new_btn').hide();
               $('#note_panel').show();
               $('#NoteModal').modal('hide');
@@ -396,7 +396,7 @@ $Title="Problem $prob_id";
             if($('#action_mark_html').html()=="Mark")
                 op="add_saved";
             else
-                op="rm_saved";	
+                op="rm_saved";
             $.get("ajax_saveproblem.php?prob="+prob+"&op="+op,function(result){
                 if(/__ok__/.test(result)){
                     var tg=$("#action_mark");
