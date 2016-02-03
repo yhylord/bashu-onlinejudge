@@ -4,6 +4,8 @@ require 'inc/checklogin.php';
 $contest_id = 1;
 if (isset($_GET['contest_id'])) {
   $contest_id = intval($_GET['contest_id']);
+} elseif (isset($_SESSION['view_contest'])) {
+  $contest_id = intval($_SESSION['view_contest']);
 }
 
 require 'inc/database.php';
@@ -15,6 +17,7 @@ if (!$contest_info) {
 }
 $Title = "Contest $contest_id";
 $contest_problems = mysql_query("SELECT problem_id, title FROM contest_problem WHERE contest_id=$contest_id");
+$_SESSION['view_contest'] = $contest_id;
 ?>
 
 <!DOCTYPE html>
