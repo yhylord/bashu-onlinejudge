@@ -22,6 +22,7 @@
           <?php
           if (isset($_SESSION['user'])):
             $user_id = $_SESSION['user'];
+            require_once 'inc/database.php';
             $saved = mysql_fetch_assoc(mysql_query("SELECT * FROM saved_problem WHERE user_id='$user_id' AND problem_id=$problem_id"));
             ?>
             <td class="width-for-2x-icon" style="border-left:0">
