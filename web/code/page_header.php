@@ -35,12 +35,14 @@ if($pref->hidelogo=='off'){ ?>
           <li><a id="nav_bbs" class="shortcut-hint" title="Alt+B" href="board.php"><i class="icon-bullhorn"></i><span class="navbar-hide-text"> Board</span></a></li>
           <li><a id="nav_set" href="problemset.php"><i class="icon-th-list"></i><span class="navbar-hide-text"> Problemset</span></a></li>
           <li><a id="nav_prob" class="shortcut-hint" title="Alt+P" href="problempage.php"><i class="icon-play-circle"></i><span class="navbar-hide-text"> Problem</span></a></li>
+          <!--TODO add icon-->
+          <li><a href="contestset.php" id="nav_contest"><span class="navbar-hide-text"> Contest</span></a></li>
           <li><a id="nav_record" class="shortcut-hint" title="Alt+R" href="record.php"><i class="icon-camera"></i><span class="navbar-hide-text"> Record</span></a></li>
           <li><a id="nav_rank" href="ranklist.php"><i class="icon-thumbs-up"></i><span class="navbar-hide-text"> Ranklist</span></a></li>
           <li><a id="nav_about" href="about.php"><i class="icon-phone"></i><span class="navbar-hide-text"> About</span></a></li>
         </ul>
         <form class="navbar-search pull-left shortcut-hint" id="search_form" title="Alt+I" action="search.php" method="get">
-          <input type="text" name="q" id="search_input" class="search-query input-medium" style="margin-bottom:0px;width:auto;" autocomplete="off" placeholder="ID, Title, Source, Tag">
+          <input type="text" name="q" id="search_input" class="search-query input-medium" style="margin-bottom:0;width:auto;" autocomplete="off" placeholder="ID, Title, Source, Tag">
         </form>
       <div class="btn-group pull-right">
 
@@ -72,7 +74,7 @@ if($pref->hidelogo=='off'){ ?>
   </div>
 </div>    
 <div class="modal hide" id="LoginModal">
-  <form id="form_login" style="margin:0px" action="login.php" method="post">
+  <form id="form_login" style="margin:0" action="login.php" method="post">
     <div class="modal-header">
       <a class="close" data-dismiss="modal">×</a>
       <h4>Login Window</h4>
