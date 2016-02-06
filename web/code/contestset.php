@@ -14,7 +14,7 @@ if (isset($_GET['page_id'])) {
 }
 
 require 'inc/database.php';
-$contest_id_max = mysql_fetch_assoc(mysql_query("SELECT max(contest_id) FROM contest"))['contest_id'];
+$contest_id_max = intval(mysql_fetch_assoc(mysql_query("SELECT MAX(contest_id) FROM contest"))['MAX(contest_id)']);
 $page_id_max = get_page_id($contest_id_max);
 if ($page_id < 1 || $page_id > $page_id_max) {
   die('Wrong Page ID.');
