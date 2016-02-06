@@ -23,10 +23,10 @@ $logged_in = isset($_SESSION['user']);
           $query = "SELECT contestants FROM contest WHERE contest_id=$contest_id";
           $contestants = unserialize(mysql_fetch_assoc(mysql_query($query))['contestants']);
           ?>
-          <?php if (in_array($_SESSION['user'], $contestants)): ?>
-            <a href="#">Register</a> <!-- TODO Implement this -->
+        <?php if (is_array($contestants) && in_array($_SESSION['user'], $contestants)): ?>
+          <span class="label label-success">Registered</span>
           <?php else: ?>
-            <span class="label label-success">Registered</span>
+        <a href="#" id="contest_register">Register</a> <!-- TODO Implement this -->
           <?php endif; ?>
         </td>
       <?php endif; ?>
