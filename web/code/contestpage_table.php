@@ -13,12 +13,12 @@
   <tbody>
     <tr>
       <?php
-      while ($row = mysql_fetch_assoc($contest_problems)):
-        $problem_id = $row['problem_id'];
+      while ($problem = mysql_fetch_assoc($contest_problems)):
+        $problem_id = $problem['problem_id'];
         ?>
         <td><?= $problem_id ?></td>
         <td style="text-align:left">
-          <a href="problempage.php?problem_id=<?= $problem_id ?>"><?= $row['title'] ?></a>
+          <a href="problempage.php?problem_id=<?= $problem_id ?>"><?= $problem['title'] ?></a>
         </td>
         <?php
         if (isset($_SESSION['user'])):
