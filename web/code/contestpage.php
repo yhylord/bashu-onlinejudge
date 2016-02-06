@@ -36,7 +36,12 @@ $_SESSION['view_contest'] = $contest_id;
           <div class="row-fluid">
             <div class="span12">
               <h3 class="problem-subtitle">Description</h3>
-              <div class="well well-small"><?=  mb_ereg_replace('\r?\n','<br>',$contest_info['description']); ?></div>
+              <div class="well well-small"><?=  nl2br($contest_info['description']); ?></div>
+            </div>
+          </div>
+          <div class="row-fluid">
+            <div class="span12">
+              <h3 class="problem-subtitle">Problems</h3>
             </div>
           </div>
           <div class="row-fluid">
@@ -67,12 +72,11 @@ $_SESSION['view_contest'] = $contest_id;
           </div>
         </div>
       </div>
+      <footer>
+        <p>&copy; 2012-2014 Bashu Middle School</p>
+      </footer>
     </div>
     <hr>
-    <footer>
-      <p>&copy; 2012-2014 Bashu Middle School</p>
-    </footer>
-    </div>
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
     <script src="../assets/js/common.js"></script>
