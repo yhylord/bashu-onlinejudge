@@ -13,7 +13,7 @@ require 'inc/database.php';
 $query = "SELECT * FROM contest WHERE contest_id=$contest_id";
 $contest_info = mysql_fetch_assoc(mysql_query($query));
 if (!$contest_info) {
-    die('Wrong Contest ID.');
+  die('Wrong Contest ID.');
 }
 $Title = "Contest $contest_id";
 $contest_problems = mysql_query("SELECT problem_id, title FROM contest_problem WHERE contest_id=$contest_id");
@@ -36,7 +36,7 @@ $_SESSION['view_contest'] = $contest_id;
           <div class="row-fluid">
             <div class="span12">
               <h3 class="problem-subtitle">Description</h3>
-              <div class="well well-small"><?=  nl2br($contest_info['description']); ?></div>
+              <div class="well well-small"><?= nl2br($contest_info['description']); ?></div>
             </div>
           </div>
           <div class="row-fluid">
@@ -63,10 +63,27 @@ $_SESSION['view_contest'] = $contest_id;
               <div class="well well-small">
                 <table class="table table-condensed table-striped" style="margin-bottom: 0">
                   <tbody>
-                    <tr><td style="text-align: left">Start Time:</td><td><?= $contest_info['start_time'] ?></td></tr>
-                    <tr><td style="text-align: left">End Time:</td><td><?= $contest_info['end_time'] ?></td></tr>
+                    <tr>
+                      <td style="text-align: left">Start Time:</td>
+                      <td><?= $contest_info['start_time'] ?></td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: left">End Time:</td>
+                      <td><?= $contest_info['end_time'] ?></td>
+                    </tr>
                   </tbody>
                 </table>
+              </div>
+            </div>
+          </div>
+          <div class="row-fluid">
+            <div class="span12" style="text-align: center">
+              <div class="well well-small problem-operation" style="margin-top: 10px" id="function">
+                <?php require 'contest_register.php' ?>
+                <!-- TODO Implement status of contests -->
+                <a href="contest_status.php?contest_id=<?= $contest_id ?>" class="btn btn-info">Status</a>
+                <!-- TODO Implement discussion for contests -->
+                <a href="board.php?contest_id=<?= $contest_id ?>" class="btn btn-warning">Discuss</a>
               </div>
             </div>
           </div>

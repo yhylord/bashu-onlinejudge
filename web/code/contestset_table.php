@@ -19,18 +19,10 @@ $logged_in = isset($_SESSION['user']);
         <td><?= $contest_id ?></td>
         <?php if ($logged_in): ?>
         <td>
-          <?php
-          $query = "SELECT contestants FROM contest WHERE contest_id=$contest_id";
-          $contestants = unserialize(mysql_fetch_assoc(mysql_query($query))['contestants']);
-          ?>
-        <?php if (is_array($contestants) && in_array($_SESSION['user'], $contestants)): ?>
-          <span class="label label-success">Registered</span>
-          <?php else: ?>
-        <a href="#" id="contest_register">Register</a> <!-- TODO Implement this -->
-          <?php endif; ?>
+          <?php require 'contest_register.php' ?>
         </td>
       <?php endif; ?>
-        <td style="text-align: left">
+        <td style="text-align: left; border-left: 0">
           <a href="contestpage.php?=<?= $contest_id ?>"><?= $contest['title'] ?></a>
         </td>
         <td><?= $contest['start_time'] ?></td>
