@@ -20,7 +20,10 @@ if ($page_id < 1 || $page_id > $page_id_max) {
   die('Wrong Page ID.');
 }
 
-$contests = mysql_query("SELECT * FROM contest WHERE contest_id BETWEEN $page_id * 10 - 9 AND $page_id * 10");
+$contest_id_start = $page_id * 10 - 9;
+$contest_id_end = $page_id * 10;
+
+$contests = mysql_query("SELECT * FROM contest WHERE contest_id BETWEEN $contest_id_start AND $contest_id_end ORDER BY contest_id");
 $Title = "Contestset $page_id";
 ?>
 
@@ -86,7 +89,7 @@ $Title = "Contestset $page_id";
           return false;
         });
         $('#btn-pre').click(function () {
-          if (cur_page > 10) {
+          if (cur_page > 1) {
             location.href = 'contestset.php?page_id=' + (cur_page - 1);
           }
           return false;
