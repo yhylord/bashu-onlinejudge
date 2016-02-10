@@ -1,5 +1,7 @@
 <?php
-if (!isset($_SESSION['uesr'], $_SESSION['administrator'])) {
+session_start();
+if (!isset($_SESSION['user'], $_SESSION['administrator'])) {
+  var_dump($_SESSION);
   die('You are not the administrator');
 }
 
