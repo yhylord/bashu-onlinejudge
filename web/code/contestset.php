@@ -33,10 +33,6 @@ $Title = "Contestset $page_id";
 
   <body>
     <?php require 'page_header.php' ?>
-    <div id="debug">
-      <?= 1 / 10 ?>
-      <?php var_dump($page_id_max); ?>
-    </div>
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="pagination pagination-centered">
