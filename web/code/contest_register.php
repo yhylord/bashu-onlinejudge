@@ -5,7 +5,7 @@
     $user_id = $_SESSION['user'];
   }
   $query = "SELECT contestants FROM contest WHERE contest_id=$contest_id";
-  $contestants = unserialize(mysql_fetch_assoc(mysql_query($query))['contestants']);
+  $contestants = json_decode(mysql_fetch_row(mysql_query($query))[0]);
   ?>
   <?php if (!is_array($contestants) || !in_array($user_id, $contestants) || !isset($user_id)): ?>
     <a href="#" id="contest-register" class="btn btn-primary">Register</a>
