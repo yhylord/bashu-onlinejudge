@@ -50,7 +50,8 @@ $Title = "New contest";
           <div class="span9">
             <p>
               <span>Problems:</span>
-              <textarea title="Problems" name="problems" class="span12" id="" cols="30" rows="10"></textarea>
+              <textarea placeholder="Please split problems by line breaks" title="Problems" name="problems"
+                        class="span12" id="" cols="30" rows="10"></textarea>
             </p>
           </div>
         </div>
