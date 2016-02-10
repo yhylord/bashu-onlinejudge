@@ -11,11 +11,11 @@ $logged_in = isset($_SESSION['user']);
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <?php
-      while ($contest = mysql_fetch_assoc($contests)):
-        $contest_id = $contest['contest_id'];
-        ?>
+    <?php
+    while ($contest = mysql_fetch_assoc($contests)):
+      $contest_id = $contest['contest_id'];
+      ?>
+      <tr>
         <td><?= $contest_id ?></td>
         <?php if ($logged_in): ?>
         <td>
@@ -27,7 +27,7 @@ $logged_in = isset($_SESSION['user']);
         </td>
         <td><?= $contest['start_time'] ?></td>
         <td><?= $contest['end_time'] ?></td>
-      <?php endwhile; ?>
-    </tr>
+      </tr>
+    <?php endwhile; ?>
   </tbody>
 </table>
