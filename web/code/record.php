@@ -11,6 +11,7 @@ $result=-1;
 $lang=-1;
 $way="none";
 $public_code=false;
+$in_contest = isset($_GET['in_contest']);
 $rank_mode=false;
 
 if(isset($_GET['problem_id'])){
@@ -110,7 +111,7 @@ function get_pre_link()
       $arr['solution_id']=$max_solution;
     else{
       while(--$num)
-        mysql_fetch_row($res);
+        mysql_fetch_array($res);
       $row=mysql_fetch_row($res);
       $arr['solution_id']=$row[0];
     }
@@ -158,6 +159,7 @@ $Title="Record";
             <label class="checkbox">
               <input <?php if($public_code)echo 'checked'?> id="chk_public" type="checkbox" name="public">Open Source
             </label>
+            <label class="checkbox"><input id="check-in-contest" type="checkbox" name="in_contest"></label>
             <span style="margin-left:5px" class="btn" id="btn_reset">Reset</span>
           </form>
         </div>
@@ -180,29 +182,35 @@ $Title="Record";
               </tr></thead>
               <tbody id="tab_record">
               <?php
-                while($row=mysql_fetch_row($res)){
+              while ($row = mysql_fetch_array($res)):
                   if($row[0]<$min_solution)
                     $min_solution=$row[0];
                   if($row[0]>$max_solution)
                     $max_solution=$row[0];
-                  echo '<tr><td>',$row[0],'</td>';
-                  echo '<td><a href="problempage.php?problem_id=',$row[1],'">',$row[1],'</a></td>';
-                  echo '<td><a href="#uid">',$row[2],'</a></td>';
-                  echo '<td><span class="label ',$RESULT_STYLE[$row[3]],'">',$RESULT_TYPE[$row[3]],'</span></td>';
-                  echo '<td>',$row[4],'</td>';
-                  if($row[3])
-                    echo '<td></td><td></td>';
-                  else{
-                    echo '<td>',$row[5],' ms</td>';
-                    echo '<td>',$row[6],' KB</td>';
-                  }
-                  echo '<td>',round($row[7]/1024,2),' KB</td>';
-                  echo '<td><a target="_blank" href="sourcecode.php?solution_id=',$row[0],'">',$LANG_NAME[$row[8]],'</a>';
-                  echo ' <a href="#sw_open_',$row[0],'"><i class=', ($row[10] ? '"icon-eye-open text-success"' : '"icon-eye-close muted"'), '></i></a> </td>';
-                  echo '<td>',$row[9],'</td>';
-                  echo '</tr>';
-                }
-              ?>
+                ?>
+                <tr>
+                  <td><?= $row[0] ?></td>
+                  <td><a href="problempage.php?problem_id=<?= $row[1] ?>><?= $row[1] ?></a></td>
+                    <td><a href=" #uid"><?= $row[2] ?></a></td>
+                  <td><span class="label <?= $RESULT_STYLE[$row[3]] ?>"><?= $RESULT_TYPE[$row[3]] ?></span></td>
+                  <td><?= $row[4] ?></td>
+                  <td><?php if ($row[3]) {
+                      echo $row[5] . 'ms';
+                    } ?></td>
+                  <td><?php if ($row[3]) {
+                      echo $row[6] . 'KB';
+                    } ?></td>
+                  <td><?= round($row[7] / 1024, 2) ?> KB</td>
+                  ';
+                  <td>
+                    <a target="_blank" href="sourcecode.php?solution_id=<?= $row[0] ?>"><?= $LANG_NAME[$row[8]] ?></a>
+                    <a href="#sw_open_<?= $row[0] ?>">
+                      <i class="<?= $row[10] ? 'icon-eye-open text-success' : 'icon-eye-close muted' ?>"></i>
+                    </a>
+                  </td>
+                  <td><?= $row[9] ?></td>
+                </tr>
+              <?php endwhile; ?>
               </tbody>
             </table>
         </div>  
@@ -299,10 +307,10 @@ $Title="Record";
         $('#ipt_user_id').keydown(function(E){
           if(E.keyCode==13)fun_submit();
         });
-        $('#filter_me').click(function(E){
+        $('#filter_me').click(function () {
           $('#ipt_user_id').val($(this).data('myuid'));
           fun_submit();
-        })
+        });
         $('#btn_reset').click(function(){window.location="record.php?problem_id="+$("#ipt_problem_id").val()+"&user_id="+$("#ipt_user_id").val();});
       }); 
     </script>
