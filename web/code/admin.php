@@ -39,6 +39,7 @@ $Title="Admin panel";
                   <div class="span3 operations">
                     <h3 class="center">Operation</h3>
                     <a href="newproblem.php" class="btn btn-primary">Add Problem</a>
+                    <a href="newcontest.php" class="btn btn-primary">Add Contest</a>
                     <a href="#" id="btn_rejudge" class="btn btn-info">Rejudge...</a>
                     <div class="alert hide" id="rejudge_res" style="margin-top:20px"></div>
                   </div>
@@ -185,7 +186,7 @@ $Title="Admin panel";
           }
         });
         $('#table_experience_title').click(function(E){
-          E.preventDefault()
+          E.preventDefault();
           var $i=$(E.target);
           if($i.is('i.icon-remove')){
             var id=$i.data('id');
