@@ -28,7 +28,7 @@
           ?>
           <td class="width-for-2x-icon" style="border-left:0">
             <i data-pid="<?= $problem_id ?>"
-               class="icon-2x text-warning save_problem <?= $saved ? 'icon-star-empty' : 'icon-star' ?>"
+               class="icon-2x text-warning save_problem <?= $saved ? 'icon-star' : 'icon-star-empty' ?>"
                style="cursor: pointer">
             </i>
           </td>
