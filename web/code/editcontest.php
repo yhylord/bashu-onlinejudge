@@ -63,7 +63,7 @@ class ContestEditor
   {
     $this->id = 1;
     $result = mysql_query("SELECT MAX(contest_id) FROM contest");
-    if (($row = mssql_fetch_row($result)) && intval($row[0])) {
+    if (($row = mysql_fetch_row($result)) && intval($row[0])) {
       $this->id = intval($row[0]) + 1;
     }
     $add_contest_info = "INSERT INTO contest (contest_id, title, start_time, end_time, description)
