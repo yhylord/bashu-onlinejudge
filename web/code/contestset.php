@@ -3,7 +3,7 @@ require 'inc/checklogin.php';
 
 function get_page_id($contest_id)
 {
-  return ($contest_id - 1) / 10 + 1;
+  return floor(($contest_id - 1) / 10) + 1;
 }
 
 $page_id = 1;
@@ -14,7 +14,7 @@ if (isset($_GET['page_id'])) {
 }
 
 require 'inc/database.php';
-$contest_id_max = intval(mysql_fetch_assoc(mysql_query("SELECT MAX(contest_id) FROM contest"))['MAX(contest_id)']);
+$contest_id_max = intval(mysql_fetch_row(mysql_query("SELECT MAX(contest_id) FROM contest"))[0]);
 $page_id_max = get_page_id($contest_id_max);
 if ($page_id < 1 || $page_id > $page_id_max) {
   die('Wrong Page ID.');
@@ -33,6 +33,10 @@ $Title = "Contestset $page_id";
 
   <body>
     <?php require 'page_header.php' ?>
+    <div id="debug">
+      <?= 1 / 10 ?>
+      <?php var_dump($page_id_max); ?>
+    </div>
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="pagination pagination-centered">
