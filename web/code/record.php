@@ -194,12 +194,8 @@ $Title="Record";
                     <td><a href=" #uid"><?= $row[2] ?></a></td>
                   <td><span class="label <?= $RESULT_STYLE[$row[3]] ?>"><?= $RESULT_TYPE[$row[3]] ?></span></td>
                   <td><?= $row[4] ?></td>
-                  <td><?php if ($row[3]) {
-                      echo $row[5] . 'ms';
-                    } ?></td>
-                  <td><?php if ($row[3]) {
-                      echo $row[6] . 'KB';
-                    } ?></td>
+                  <td><?= $row[3] ? ($row[5] . 'ms') : '' ?></td>
+                  <td><?= $row[3] ? ($row[6] . 'KB') : '' ?></td>
                   <td><?= round($row[7] / 1024, 2) ?> KB</td>
                   ';
                   <td>
