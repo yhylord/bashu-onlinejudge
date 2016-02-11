@@ -35,8 +35,8 @@ if($pref->hidelogo=='off'){ ?>
           <li><a id="nav_bbs" class="shortcut-hint" title="Alt+B" href="board.php"><i class="icon-bullhorn"></i><span class="navbar-hide-text"> Board</span></a></li>
           <li><a id="nav_set" href="problemset.php"><i class="icon-th-list"></i><span class="navbar-hide-text"> Problemset</span></a></li>
           <li><a id="nav_prob" class="shortcut-hint" title="Alt+P" href="problempage.php"><i class="icon-play-circle"></i><span class="navbar-hide-text"> Problem</span></a></li>
-          <!--TODO add icon-->
-          <li><a href="contestset.php" id="nav_contest"><span class="navbar-hide-text"> Contest</span></a></li>
+          <li><a href="contestset.php" id="nav_contest"><i class="icon-flag"></i><span
+                class="navbar-hide-text"> Contest</span></a></li>
           <li><a id="nav_record" class="shortcut-hint" title="Alt+R" href="record.php"><i class="icon-camera"></i><span class="navbar-hide-text"> Record</span></a></li>
           <li><a id="nav_rank" href="ranklist.php"><i class="icon-thumbs-up"></i><span class="navbar-hide-text"> Ranklist</span></a></li>
           <li><a id="nav_about" href="about.php"><i class="icon-phone"></i><span class="navbar-hide-text"> About</span></a></li>
@@ -60,11 +60,11 @@ if($pref->hidelogo=='off'){ ?>
           <li><a href="profile.php"><i class="icon-github"></i> profile</a></li>
           <li><a href="control.php"><i class="icon-cogs"></i> preference</a></li>
 <?php   if(isset($_SESSION['administrator']))
-          echo '<li class="divider"></li><li><a href="admin.php"><i class="icon-bolt"></i>admin</a></li>'; 
+  echo '<li class="divider"></li><li><a href="admin.php"><i class="icon-bolt"></i>admin</a></li>';
 ?>
           <li class="divider"></li>
           <li><a id='logoff_btn' href="#"><i class="icon-signout"></i> sign out</a></li>
-        </ul>
+        </ul>`x`
 <?php }else{?>
         <a id="login_btn" title="Alt+L" data-toggle="modal" href="#LoginModal" class="btn shortcut-hint">Login</a>
         <a href="reg.php" class="btn">Sign Up</a>
@@ -72,7 +72,7 @@ if($pref->hidelogo=='off'){ ?>
       </div>
     </div>
   </div>
-</div>    
+</div>
 <div class="modal hide" id="LoginModal">
   <form id="form_login" style="margin:0" action="login.php" method="post">
     <div class="modal-header">
