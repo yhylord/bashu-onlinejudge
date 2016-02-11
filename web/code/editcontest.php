@@ -66,8 +66,8 @@ class ContestEditor
     if (($row = mysql_fetch_row($result)) && intval($row[0])) {
       $this->id = intval($row[0]) + 1;
     }
-    $add_contest_info = "INSERT INTO contest (contest_id, title, start_time, end_time, description)
-                VALUES ($this->id, '$this->title', '$this->start_time', '$this->end_time', '$this->description')";
+    $add_contest_info = "INSERT INTO contest (contest_id, title, start_time, end_time, description, contestants)
+                VALUES ($this->id, '$this->title', '$this->start_time', '$this->end_time', '$this->description', '[]')";
     $this->test($add_contest_info);
     $this->add_problems();
     header("Location: contestpage.php?contest_id=$this->id");
