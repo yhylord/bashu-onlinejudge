@@ -49,6 +49,10 @@ class ContestEditor
     if (!is_array($this->problems)) {
       throw new Exception('Invalid problems');
     }
+    $duplicates = array_unique(array_diff($this->problems, array_unique($this->problems)));
+    if ($duplicates) {
+      throw new Exception('There are duplicated problems: ' . join(', ', $duplicates));
+    }
     $problem_id_max = mysql_fetch_row(mysql_query("SELECT MAX(problem_id) FROM problem"))[0];
     $problem_id_min = mysql_fetch_row(mysql_query("SELECT MIN(problem_id) FROM problem"))[0];
     foreach ($this->problems as $index => &$problem) {
