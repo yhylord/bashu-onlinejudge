@@ -78,7 +78,7 @@ $Title = "Contestset $page_id";
     <script type="text/javascript">
       $(document).ready(function () {
         var cur_page = <?= $page_id ?>, max_page = <?= $page_id_max ?>;
-        $('#nav_set').parent().addClass('active');
+        $('#nav_contest').parent().addClass('active');
         $('#ret_url').val("contestset.php?page_id=" + cur_page);
 
         //TODO save contest
