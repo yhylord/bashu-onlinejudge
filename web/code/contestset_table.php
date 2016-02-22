@@ -23,7 +23,7 @@ $logged_in = isset($_SESSION['user']);
         </td>
       <?php endif; ?>
         <td style="text-align: left; border-left: 0">
-          <a href="contestpage.php?=<?= $contest_id ?>"><?= $contest['title'] ?></a>
+          <a href="contestpage.php?contest_id=<?= $contest_id ?>"><?= $contest['title'] ?></a>
         </td>
         <td><?= $contest['start_time'] ?></td>
         <td><?= $contest['end_time'] ?></td>
