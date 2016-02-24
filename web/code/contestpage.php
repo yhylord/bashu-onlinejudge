@@ -80,7 +80,6 @@ $_SESSION['view_contest'] = $contest_id;
             <div class="span12" style="text-align: center">
               <div class="well well-small problem-operation" style="margin-top: 10px" id="function">
                 <?php require 'contest_register.php' ?>
-                <!-- TODO Implement status of contests -->
                 <a href="contest_status.php?contest_id=<?= $contest_id ?>" class="btn btn-info">Status</a>
                 <!-- TODO Implement discussion for contests -->
                 <a href="board.php?contest_id=<?= $contest_id ?>" class="btn btn-warning">Discuss</a>
