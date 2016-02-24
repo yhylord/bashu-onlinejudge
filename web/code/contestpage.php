@@ -89,11 +89,11 @@ $_SESSION['view_contest'] = $contest_id;
           </div>
         </div>
       </div>
+      <hr>
       <footer>
         <p>&copy; 2012-2014 Bashu Middle School</p>
       </footer>
     </div>
-    <hr>
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
     <script src="../assets/js/common.js"></script>
