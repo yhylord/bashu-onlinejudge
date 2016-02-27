@@ -1,4 +1,4 @@
-<span id="contest-register-cell">
+<span id="contest-register-cell-<?= $contest_id ?>">
   <?php
   $user_id = NULL;
   if (isset($_SESSION['user'])) {
@@ -8,11 +8,11 @@
   $contestants = json_decode(mysql_fetch_row(mysql_query($query))[0]);
   ?>
   <?php if (!is_array($contestants) || !in_array($user_id, $contestants) || !isset($user_id)): ?>
-    <a href="#" id="contest-register" class="btn btn-primary">Register</a>
+    <a href="#" id="contest-register-<?= $contest_id ?>" class="btn btn-primary">Register</a>
     <script src="../assets/js/jquery.js"></script>
     <script type="text/javascript">
       $(document).ready(function () {
-        $('#contest-register').click(function () {
+        $('#contest-register-<?= $contest_id ?>').click(function () {
           <?php if (!isset($user_id)): ?>
           alert("You haven't logged in.");
           <?php else: ?>
@@ -25,8 +25,8 @@
             },
             success: function (msg) {
               if (msg == 'success') {
-                $('#contest-register-cell').add('<span class="label label-success">Registered</span>');
-                $('#contest-register').remove();
+                $('#contest-register-cell-<?= $contest_id ?>').append('<span class="label label-success">Registered</span>');
+                $('#contest-register-<?= $contest_id ?>').remove();
               } else {
                 alert(msg);
               }

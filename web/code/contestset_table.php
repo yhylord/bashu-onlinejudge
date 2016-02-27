@@ -18,10 +18,10 @@ $logged_in = isset($_SESSION['user']);
       <tr>
         <td><?= $contest_id ?></td>
         <?php if ($logged_in): ?>
-        <td>
-          <?php require 'contest_register.php' ?>
-        </td>
-      <?php endif; ?>
+          <td>
+            <?php require 'contest_register.php' ?>
+          </td>
+        <?php endif; ?>
         <td style="text-align: left; border-left: 0">
           <a href="contestpage.php?contest_id=<?= $contest_id ?>"><?= $contest['title'] ?></a>
         </td>
